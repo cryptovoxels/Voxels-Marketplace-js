@@ -1,4 +1,4 @@
-export type Network = "mainnet" | "rinkeby" | "polygon";
+export type Network = "mainnet" | "rinkeby" | "polygon" | "mumbai";
 export type address = string;
 export type ListingId = string
 export interface ListingParams {

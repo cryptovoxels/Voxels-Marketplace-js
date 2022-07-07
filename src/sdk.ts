@@ -12,6 +12,7 @@ import { Marketplacev1 } from "./lib/contracts";
 import { ListingStructOutput } from "./lib/contracts/Marketplacev1";
 import {
   generateListingId,
+  getContractAddressByNetwork,
   handleTransaction,
   validateListingParams,
 } from "./lib/helpers";
@@ -30,8 +31,7 @@ export class VoxelsMarketplace extends EventEmitter {
     super();
     this.provider =
       new providers.Web3Provider(provider) || getDefaultProvider(network);
-    this.contractInstance = new Contract(
-      network == "rinkeby" ? MARKETPLACE_CONTRACT_RINKEBY : network,
+    this.contractInstance = new Contract(getContractAddressByNetwork(network),
       marketplaceAbi,
       this.provider
     ) as Marketplacev1;

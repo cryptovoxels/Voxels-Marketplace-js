@@ -1,6 +1,7 @@
 import { constants, providers, utils } from "ethers";
 import { keccak256 } from "ethers/lib/utils";
-import { address, ListingParams } from "./types";
+import { MARKETPLACE_CONTRACT_RINKEBY } from "./constants";
+import { address, ListingParams, Network } from "./types";
 
 type txError = {
   hash?: string;
@@ -87,3 +88,19 @@ export const generateListingId = (
     )
   );
 };
+
+
+export const getContractAddressByNetwork = (network:Network)=>{
+  switch (network) {
+    case 'rinkeby':
+      return MARKETPLACE_CONTRACT_RINKEBY
+    case 'mainnet':
+      return ''
+    case 'polygon':
+      return ''
+    case 'mumbai':
+      return ''
+    default:
+      return ''
+  }
+}
