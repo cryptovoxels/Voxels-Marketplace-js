@@ -72,23 +72,17 @@ export const validateListingParams = (
 export const generateListingId = (
   sellerAddress: address,
   contractAddress: address,
-  tokenId: string,
-  price: number,
-  quantity: number,
-  acceptedPayment: address
+  tokenId: string
 ) => {
   //using abi encoder as apparently more secure
   //https://github.com/ethers-io/ethers.js/issues/468#issuecomment-475990764
   return keccak256(
     utils.defaultAbiCoder.encode(
-      ["address", "address", "uint256", "uint256", "uint256", "address"],
+      ["address", "address", "uint256"],
       [
         sellerAddress,
         contractAddress,
-        tokenId,
-        price,
-        quantity,
-        acceptedPayment,
+        tokenId
       ]
     )
   );

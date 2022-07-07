@@ -1,5 +1,6 @@
 export type Network = "mainnet" | "rinkeby" | "polygon";
 export type address = string;
+export type ListingId = string
 export interface ListingParams {
   token_id: string;
   address: string;

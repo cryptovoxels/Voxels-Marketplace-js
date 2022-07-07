@@ -9,12 +9,13 @@ import {
 import { EventEmitter } from "events";
 import { MARKETPLACE_CONTRACT_RINKEBY } from "./lib/constants";
 import { Marketplacev1 } from "./lib/contracts";
+import { ListingStructOutput } from "./lib/contracts/Marketplacev1";
 import {
   generateListingId,
   handleTransaction,
   validateListingParams,
 } from "./lib/helpers";
-import { ListingParams, Network } from "./lib/types";
+import { ListingId, ListingParams, Network } from "./lib/types";
 const marketplaceAbi = require("../abi/marketplacev1.json");
 
 export class VoxelsMarketplace extends EventEmitter {
@@ -39,7 +40,7 @@ export class VoxelsMarketplace extends EventEmitter {
     }
   }
 
-  getListing = async (id: string) => {
+  getListing = async (id: ListingId,index:number = 0) => {
     if (!this.contractInstance) {
       throw Error("SDK not initialized");
     }
@@ -47,7 +48,7 @@ export class VoxelsMarketplace extends EventEmitter {
       throw Error("ID is invalid");
     }
     try {
-      const listing = await this.contractInstance.getListing(id);
+      const listing = await this.contractInstance.getListing(id,index);
       console.log(listing);
       return listing;
     } catch (e: any) {
@@ -131,21 +132,19 @@ export class VoxelsMarketplace extends EventEmitter {
     if (!validatedParams.seller) {
       throw Error("Seller address is undefined");
     }
-    let id = generateListingId(
-      validatedParams.seller,
-      validatedParams.address,
-      validatedParams.token_id,
-      validatedParams.price,
-      validatedParams.quantity,
-      validatedParams.acceptedPayment
-    );
+
+    const listingIndexes = await this.getListingIndexFromParams(validatedParams)
+    if(!listingIndexes){
+      return
+    }
 
     this.emit("tx-started");
     //list item
     let tx;
     try {
       tx = await this.contractInstance.buyWithToken(
-        id,
+        listingIndexes.hash,
+        listingIndexes.index,
         validatedParams.quantity
       );
     } catch (e: any) {
@@ -172,20 +171,15 @@ export class VoxelsMarketplace extends EventEmitter {
     if (!validatedParams.seller) {
       throw Error("Seller address is undefined");
     }
-    let id = generateListingId(
-      validatedParams.seller,
-      validatedParams.address,
-      validatedParams.token_id,
-      validatedParams.price,
-      validatedParams.quantity,
-      validatedParams.acceptedPayment
-    );
-
+    const listingIndexes = await this.getListingIndexFromParams(validatedParams)
+    if(!listingIndexes){
+      return
+    }
     this.emit("tx-started");
     //list item
     let tx;
     try {
-      tx = await this.contractInstance.buy(id, validatedParams.quantity);
+      tx = await this.contractInstance.buy(listingIndexes.hash,listingIndexes.index, validatedParams.quantity);
     } catch (e: any) {
       const err = e.toString ? e.toString() : e;
       this.logger(err);
@@ -206,15 +200,57 @@ export class VoxelsMarketplace extends EventEmitter {
     return receipt;
   };
 
-  cancelListing = async (params: ListingParams) => {
+  cancelListingByInfo = async (params: ListingParams) => {
     if (!this.contractInstance) {
       throw Error("SDK not initialized");
     }
+ 
+    const listingIndexes = await this.getListingIndexFromParams(params)
+    if(!listingIndexes){
+      return
+    }
+    let receipt = await this.cancelListing(listingIndexes.hash,listingIndexes.index)
+    return receipt
+  };
+
+  cancelListing = async (id: ListingId,index:number) => {
+    if (!this.contractInstance) {
+      throw Error("SDK not initialized");
+    }
+
+    this.emit("tx-started");
+    //list item
+    let tx;
+    try {
+      tx = await this.contractInstance.cancelList(id,index);
+    } catch (e: any) {
+      const err = e.toString ? e.toString() : e;
+      this.logger(err);
+      this.emit("error", err);
+      return;
+    }
+    this.emit("tx-hash", { hash: tx.hash });
+    let receipt;
+    try {
+      receipt = await handleTransaction(tx);
+    } catch (e: any) {
+      const err = e.toString ? e.toString() : e;
+      this.logger(err);
+      this.emit("error", err);
+      return;
+    }
+    this.emit("tx-mined", { hash: receipt.transactionHash });
+    return receipt;
+  }
+
+
+  getListingIndexFromParams = async (params: ListingParams):Promise<{hash:ListingId,index:number} | null> => {
+
     try {
       validateListingParams(params);
     } catch (e: any) {
       this.logger(e);
-      return;
+      return null;
     }
     const validatedParams = {
       ...params,
@@ -225,34 +261,35 @@ export class VoxelsMarketplace extends EventEmitter {
     let id = generateListingId(
       validatedParams.seller,
       validatedParams.address,
-      validatedParams.token_id,
-      validatedParams.price,
-      validatedParams.quantity,
-      validatedParams.acceptedPayment
+      validatedParams.token_id
     );
 
-    this.emit("tx-started");
-    //list item
-    let tx;
+    // get listings
+    let listings:ListingStructOutput[];
     try {
-      tx = await this.contractInstance.cancelList(id);
+      listings = await this.contractInstance.getListings(id);
     } catch (e: any) {
       const err = e.toString ? e.toString() : e;
       this.logger(err);
       this.emit("error", err);
-      return;
+      return null;
     }
-    this.emit("tx-hash", { hash: tx.hash });
-    let receipt;
-    try {
-      receipt = await handleTransaction(tx);
-    } catch (e: any) {
-      const err = e.toString ? e.toString() : e;
-      this.logger(err);
-      this.emit("error", err);
-      return;
+
+    const listing = listings.find((l)=>{
+      return l.quantity.toNumber() == validatedParams.quantity && l.price.toNumber() == validatedParams.price && l.acceptedPayment.toLowerCase() == validatedParams.acceptedPayment.toLowerCase()
+    })
+
+    
+    if(!listing){
+      console.warn('No listing found with the given parameters.')
+      return null
     }
-    this.emit("tx-mined", { hash: receipt.transactionHash });
-    return receipt;
-  };
+    const index = listings.indexOf(listing)
+    if(index ==-1){
+      console.warn('No listing found with the given parameters.')
+      return null
+    }
+
+    return {hash:id,index}
+  }
 }
