@@ -7,12 +7,11 @@ import {
   utils,
 } from "ethers";
 import { EventEmitter } from "events";
-import { MARKETPLACE_CONTRACT_RINKEBY } from "./lib/constants";
 import { Marketplacev1 } from "./lib/contracts";
 import { ListingStructOutput } from "./lib/contracts/Marketplacev1";
 import {
   generateListingId,
-  getContractAddressByNetwork,
+  getContractsByNetwork,
   handleTransaction,
   validateListingParams,
 } from "./lib/helpers";
@@ -31,7 +30,7 @@ export class VoxelsMarketplace extends EventEmitter {
     super();
     this.provider =
       new providers.Web3Provider(provider) || getDefaultProvider(network);
-    this.contractInstance = new Contract(getContractAddressByNetwork(network),
+    this.contractInstance = new Contract(getContractsByNetwork(network).marketplace,
       marketplaceAbi,
       this.provider
     ) as Marketplacev1;

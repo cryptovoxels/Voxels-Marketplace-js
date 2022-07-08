@@ -19,3 +19,10 @@ export interface EventStarted {
 export interface EventSuccess {
   hash: string;
 }
+
+
+export interface ContractsByNetwork {
+  wrapperRegistry:string
+  marketplace:string
+  tokenRegistry:string
+}
