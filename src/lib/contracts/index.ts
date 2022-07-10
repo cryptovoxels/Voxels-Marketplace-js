@@ -2,5 +2,11 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { Marketplacev1 } from "./Marketplacev1";
+export type { SupportsInterface } from "./SupportsInterface";
+export type { Wrapper } from "./Wrapper";
+export type { WrapperRegistry } from "./WrapperRegistry";
 export * as factories from "./factories";
 export { Marketplacev1__factory } from "./factories/Marketplacev1__factory";
+export { SupportsInterface__factory } from "./factories/SupportsInterface__factory";
+export { Wrapper__factory } from "./factories/Wrapper__factory";
+export { WrapperRegistry__factory } from "./factories/WrapperRegistry__factory";

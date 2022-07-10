@@ -1,42 +1,54 @@
-import { Networkish } from "@ethersproject/networks";
 import {
   constants,
   Contract,
+  ethers,
   getDefaultProvider,
-  providers,
   utils,
 } from "ethers";
 import { EventEmitter } from "events";
 import { Marketplacev1 } from "./lib/contracts";
 import { ListingStructOutput } from "./lib/contracts/Marketplacev1";
 import {
+  askApproval,
   generateListingId,
+  getAddressFromSigner,
   getContractsByNetwork,
+  getIsApproved,
   handleTransaction,
+  isProvider,
   validateListingParams,
 } from "./lib/helpers";
-import { ListingId, ListingParams, Network } from "./lib/types";
+import { ListingId, ListingParams, Network, ProviderOrSigner } from "./lib/types";
 const marketplaceAbi = require("../abi/marketplacev1.json");
 
 export class VoxelsMarketplace extends EventEmitter {
-  private provider: any;
+  private providerOrSigner: ProviderOrSigner;
   private contractInstance: Marketplacev1;
+  private network:Network;
   private logger: (args: string) => void = console.log;
   constructor(
-    provider: any,
+    providerOrSigner: ProviderOrSigner,
     network: Network = "mainnet",
     logger?: (args: string) => void
   ) {
     super();
-    this.provider =
-      new providers.Web3Provider(provider) || getDefaultProvider(network);
+
+    this.providerOrSigner = this.handleProviderOrSigner(providerOrSigner,network)
+    this.network = network;
     this.contractInstance = new Contract(getContractsByNetwork(network).marketplace,
       marketplaceAbi,
-      this.provider
+      this.providerOrSigner
     ) as Marketplacev1;
     if (logger) {
       this.logger = logger;
     }
+  }
+
+  private handleProviderOrSigner (providerOrSigner:ProviderOrSigner,network:Network){
+    if(!providerOrSigner){
+      return getDefaultProvider(network);
+    }
+    return providerOrSigner
   }
 
   getListing = async (id: ListingId,index:number = 0) => {
@@ -63,6 +75,10 @@ export class VoxelsMarketplace extends EventEmitter {
       throw Error("SDK not initialized");
     }
 
+    if(isProvider(this.providerOrSigner)){
+      throw Error("Use a Signer to list an item");
+    }
+
     try {
       validateListingParams(params);
     } catch (e: any) {
@@ -70,9 +86,19 @@ export class VoxelsMarketplace extends EventEmitter {
       return;
     }
     const validatedParams: ListingParams = params as ListingParams;
-    // check ownership of asset
 
-    this.emit("tx-started");
+    const userWallet = await getAddressFromSigner(this.providerOrSigner as ethers.Signer)
+    //Check approval of the implementation contract
+    let isApproved = await getIsApproved(this.contractInstance,validatedParams.address,userWallet,this.network)
+    if(!isApproved){
+      isApproved = await askApproval(this.contractInstance,validatedParams.address,userWallet,this.network,this.emit)
+      if(!isApproved){
+        // Cannot list if not approved
+        throw new Error("Cannot list if contract is not approved");
+      }
+    }
+
+    this.emit("@:tx-started");
     //list item
     let tx;
     try {
@@ -86,10 +112,10 @@ export class VoxelsMarketplace extends EventEmitter {
     } catch (e: any) {
       const err = e.toString ? e.toString() : e;
       this.logger(err);
-      this.emit("error", err);
+      this.emit("@:error", err);
       return;
     }
-    this.emit("tx-hash", { hash: tx.hash });
+    this.emit("@:tx-hash", { hash: tx.hash });
     let receipt;
     try {
       receipt = await handleTransaction(tx);
@@ -99,7 +125,7 @@ export class VoxelsMarketplace extends EventEmitter {
       this.emit("error", err);
       return;
     }
-    this.emit("tx-mined", { hash: receipt.transactionHash });
+    this.emit("@:tx-mined", { hash: receipt.transactionHash });
     return receipt;
   };
 
@@ -107,7 +133,9 @@ export class VoxelsMarketplace extends EventEmitter {
     if (!this.contractInstance) {
       throw Error("SDK not initialized");
     }
-
+    if(isProvider(this.providerOrSigner)){
+      throw Error("Use a Signer to purchase an item");
+    }
     try {
       validateListingParams(params);
     } catch (e: any) {
@@ -131,13 +159,12 @@ export class VoxelsMarketplace extends EventEmitter {
     if (!validatedParams.seller) {
       throw Error("Seller address is undefined");
     }
-
     const listingIndexes = await this.getListingIndexFromParams(validatedParams)
     if(!listingIndexes){
       return
     }
 
-    this.emit("tx-started");
+    this.emit("@:tx-started");
     //list item
     let tx;
     try {
@@ -152,7 +179,7 @@ export class VoxelsMarketplace extends EventEmitter {
       this.emit("error", err);
       return;
     }
-    this.emit("tx-hash", { hash: tx.hash });
+    this.emit("@:tx-hash", { hash: tx.hash });
     let receipt;
     try {
       receipt = await handleTransaction(tx);
@@ -162,7 +189,7 @@ export class VoxelsMarketplace extends EventEmitter {
       this.emit("error", err);
       return;
     }
-    this.emit("tx-mined", { hash: receipt.transactionHash });
+    this.emit("@:tx-mined", { hash: receipt.transactionHash });
     return receipt;
   };
 
@@ -174,7 +201,7 @@ export class VoxelsMarketplace extends EventEmitter {
     if(!listingIndexes){
       return
     }
-    this.emit("tx-started");
+    this.emit("@:tx-started");
     //list item
     let tx;
     try {
@@ -185,7 +212,7 @@ export class VoxelsMarketplace extends EventEmitter {
       this.emit("error", err);
       return;
     }
-    this.emit("tx-hash", { hash: tx.hash });
+    this.emit("@:tx-hash", { hash: tx.hash });
     let receipt;
     try {
       receipt = await handleTransaction(tx);
@@ -195,7 +222,7 @@ export class VoxelsMarketplace extends EventEmitter {
       this.emit("error", err);
       return;
     }
-    this.emit("tx-mined", { hash: receipt.transactionHash });
+    this.emit("@:tx-mined", { hash: receipt.transactionHash });
     return receipt;
   };
 
@@ -203,7 +230,7 @@ export class VoxelsMarketplace extends EventEmitter {
     if (!this.contractInstance) {
       throw Error("SDK not initialized");
     }
- 
+
     const listingIndexes = await this.getListingIndexFromParams(params)
     if(!listingIndexes){
       return
@@ -216,8 +243,10 @@ export class VoxelsMarketplace extends EventEmitter {
     if (!this.contractInstance) {
       throw Error("SDK not initialized");
     }
-
-    this.emit("tx-started");
+    if(isProvider(this.providerOrSigner)){
+      throw Error("Use a Signer to cancel a listing");
+    }
+    this.emit("@:tx-started");
     //list item
     let tx;
     try {
@@ -228,7 +257,7 @@ export class VoxelsMarketplace extends EventEmitter {
       this.emit("error", err);
       return;
     }
-    this.emit("tx-hash", { hash: tx.hash });
+    this.emit("@:tx-hash", { hash: tx.hash });
     let receipt;
     try {
       receipt = await handleTransaction(tx);
@@ -238,10 +267,9 @@ export class VoxelsMarketplace extends EventEmitter {
       this.emit("error", err);
       return;
     }
-    this.emit("tx-mined", { hash: receipt.transactionHash });
+    this.emit("@:tx-mined", { hash: receipt.transactionHash });
     return receipt;
   }
-
 
   getListingIndexFromParams = async (params: ListingParams):Promise<{hash:ListingId,index:number} | null> => {
 

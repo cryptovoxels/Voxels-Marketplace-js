@@ -2,3 +2,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export { Marketplacev1__factory } from "./Marketplacev1__factory";
+export { SupportsInterface__factory } from "./SupportsInterface__factory";
+export { Wrapper__factory } from "./Wrapper__factory";
+export { WrapperRegistry__factory } from "./WrapperRegistry__factory";

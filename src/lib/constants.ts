@@ -1,5 +1,9 @@
 import { Network,ContractsByNetwork } from "./types";
 
+export const ERC721_INTERFACE_ID = `0x80ac58cd`;
+export const ERC1155_INTERFACE_ID = `0xd9b67a26`;
+export const WRAPPER_INTERFACE_ID = `0xfe939973`;
+
 export const CONTRACTS:Record<Network,ContractsByNetwork>= {
     mumbai:{
         wrapperRegistry:`0x9dbB5FF57435eCb29deA5903143F4C133e79477D`,
