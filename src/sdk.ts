@@ -1,3 +1,4 @@
+require('dotenv').config()
 import {
   constants,
   Contract,
@@ -19,7 +20,7 @@ import {
   validateListingParams,
 } from "./lib/helpers";
 import { ListingId, ListingParams, Network, ProviderOrSigner } from "./lib/types";
-const marketplaceAbi = require("../abi/marketplacev1.json");
+const marketplaceAbi = require("./abis/marketplacev1.json");
 
 export class VoxelsMarketplace extends EventEmitter {
   private providerOrSigner: ProviderOrSigner;
@@ -318,5 +319,9 @@ export class VoxelsMarketplace extends EventEmitter {
     }
 
     return {hash:id,index}
+  }
+
+  get contract(){
+    return this.contractInstance
   }
 }

@@ -24,5 +24,10 @@ export const CONTRACTS:Record<Network,ContractsByNetwork>= {
         tokenRegistry:``,
         marketplace:``,
         wrapperRegistry:``,
+    },
+    local:{
+        tokenRegistry:process.env.TOKEN_REGISTRY_CONTRACT||'',
+        marketplace:process.env.MARKETPLACE_CONTRACT||'',
+        wrapperRegistry:process.env.WRAPPER_REGISTRY_CONTRACT||'',
     }
 }

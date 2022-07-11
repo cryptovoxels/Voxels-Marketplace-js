@@ -4,9 +4,9 @@ import { CONTRACTS, ERC1155_INTERFACE_ID, ERC721_INTERFACE_ID } from "./constant
 import { SupportsInterface, Wrapper, WrapperRegistry } from "./contracts";
 import type { Marketplacev1 } from "./contracts/Marketplacev1";
 import { address, ContractsByNetwork, ListingParams, Network, ProviderOrSigner } from "./types";
-const wrapperABI = require("../abi/wrapper.json");
-const wrapperRegistryABI = require("../abi/wrapperRegistry.json");
-const supportsInterfaceABI = require("../abi/supportsInterface.json");
+const wrapperABI = require("../abis/wrapper.json");
+const wrapperRegistryABI = require("../abis/wrapperRegistry.json");
+const supportsInterfaceABI = require("../abis/supportsInterface.json");
 
 
 type txError = {

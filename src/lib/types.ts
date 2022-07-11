@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { providers } from "ethers/lib/ethers";
 
-export type Network = "mainnet" | "rinkeby" | "polygon" | "mumbai";
+export type Network = "mainnet" | "rinkeby" | "polygon" | "mumbai" | "local";
 export type address = string;
 export type ListingId = string
 
