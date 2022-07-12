@@ -3,9 +3,13 @@ import { providers } from "ethers/lib/ethers";
 
 export type Network = "mainnet" | "rinkeby" | "polygon" | "mumbai" | "local";
 export type address = string;
-export type ListingId = string
+export type ListingId = string;
 
-export type ProviderOrSigner = providers.BaseProvider| providers.Web3Provider |providers.JsonRpcProvider | ethers.Signer
+export type ProviderOrSigner =
+  | providers.BaseProvider
+  | providers.Web3Provider
+  | providers.JsonRpcProvider
+  | ethers.Signer;
 
 export interface ListingParams {
   token_id: string;
@@ -13,7 +17,13 @@ export interface ListingParams {
   price: number;
   quantity: number;
   acceptedPayment: string;
-  seller?: string;
+}
+
+export type ListingInfo = ListingParams & { seller: string };
+
+export interface ListingIndexes {
+  hash: ListingId;
+  index: number;
 }
 
 export interface ErrorEvent {
@@ -26,9 +36,14 @@ export interface EventSuccess {
   hash: string;
 }
 
-
 export interface ContractsByNetwork {
-  wrapperRegistry:string
-  marketplace:string
-  tokenRegistry:string
+  wrapperRegistry: string;
+  marketplace: string;
+  tokenRegistry: string;
 }
+
+export type IndexingParameters = {
+  id: ListingId;
+  index?: number;
+};
+export type IndexingObject = Required<IndexingParameters>;

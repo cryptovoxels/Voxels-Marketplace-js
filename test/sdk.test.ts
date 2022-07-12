@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import test from 'tape'
 import {generateListingId, VoxelsMarketplace} from '../src/index'
 import { askApproval, getIsApproved } from '../src/lib/helpers';
-import { ListingParams } from '../src/lib/types';
+import { ListingInfo, ListingParams } from '../src/lib/types';
 const MockERC721JSON = require('./abis/MockERC721.json')
 
 // Once a Ganache node is running, it behaves very similar to a
@@ -13,13 +13,18 @@ const url = "http://localhost:8545";
 
 const provider = new ethers.providers.JsonRpcProvider(url);
 const signer = provider.getSigner()
+const signer2 = provider.getSigner(1)
 
-const mockErc721Factory = new ethers.ContractFactory(MockERC721JSON.abi,MockERC721JSON.bytecode,signer)
-const mockERC721 = await mockErc721Factory.deploy()
-mockERC721.mint(1)
+let mockERC721:ethers.Contract;
 
 const sdk:VoxelsMarketplace = new VoxelsMarketplace(signer,'local')
 //Custom function to create heeaps of orders
+test('Setup()', async (t) => {
+    const mockErc721Factory = new ethers.ContractFactory(MockERC721JSON.abi,MockERC721JSON.bytecode,signer)
+    mockERC721 = await mockErc721Factory.deploy()
+    mockERC721.mint(1)
+    t.end()
+})
 
 test('Make sure env vars are set', (t) => {
     t.ok(process.env.TOKEN_REGISTRY_CONTRACT)
@@ -38,7 +43,7 @@ test('Helpers: Approval mockERC721 is false', async (assert) => {
 test('Helpers: ask Approval mockERC721', async (assert) => {
     const wallet = await signer.getAddress()
 
-    let isApproved = await askApproval(sdk.contract,mockERC721.address,wallet,'local',sdk.emit)
+    let isApproved = await askApproval(sdk.contract,mockERC721.address,wallet,'local',sdk.emit.bind(sdk))
     assert.true(isApproved,"Contract should now be approved")
     assert.end()
 })
@@ -59,7 +64,7 @@ test('SDK list item', async (assert) => {
 })
 
 
-test('SDK Get listing', async (assert) => {
+test('SDK Get listing; index 0', async (assert) => {
     const params:ListingParams = {
         token_id:'1',
         address:mockERC721.address,
@@ -77,11 +82,39 @@ test('SDK Get listing', async (assert) => {
         assert.end()
         return
     }
-    console.log(listing)
+
     assert.equal(listing.acceptedPayment,ethers.constants.AddressZero,'acceptedPayment should be address Zero')
     assert.equal(listing.contractAddress,params.address,'contractAddress should be '+params.address)
     assert.equal(listing.seller,wallet,'Seller should be '+wallet)
-    assert.equal(listing.quantity,params.quantity,'Quantity should be '+params.quantity)
+    assert.equal(listing.quantity.toNumber(),params.quantity,'Quantity should be '+params.quantity)
+    assert.end()
+
+})
+
+
+test('SDK Buy listing', async (assert) => {
+    const wallet = await signer.getAddress()
+
+    const id = generateListingId(wallet,mockERC721.address,'1')
+    
+    sdk.connect(signer2)
+    try{
+        await sdk.purchase(id)
+        assert.ok(true)
+    }catch(e:any){
+        assert.fail(e||"Failed to purchase NFT")
+        assert.end()
+        return
+    }
+    
+    let listing = await sdk.getListing(id)
+    if(!listing){
+        assert.fail('Unexpected: No listing found')
+        assert.end()
+        return
+    }
+
+    assert.equal(listing.quantity.toNumber(),0,"Quantity should be zero")
     assert.end()
 
 })
