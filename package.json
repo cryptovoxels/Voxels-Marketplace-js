@@ -4,7 +4,8 @@
   "description": "A simple JS sdk to interact with Voxels' marketplace",
   "main": "dist/index.js",
   "scripts": {
-    "abi-type-gen": "typechain --target=ethers-v5 src/abis/*.json --out-dir=src/lib/contracts",
+    "abi-type-gen": "npm run clean:types && typechain --target=ethers-v5 src/abis/*.json --out-dir=src/lib/contracts",
+    "clean:types": "rm -rf src/lib/contracts",
     "clean": "rm -rf dist",
     "build": "npm run abi-type-gen && tsc -p tsconfig.build.json",
     "test": "ts-node ./test/deployLocal.ts && tape -r ts-node/register ./test/**/*.test.ts",

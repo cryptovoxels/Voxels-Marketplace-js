@@ -5,7 +5,7 @@ import {
   ERC1155_INTERFACE_ID,
   ERC721_INTERFACE_ID,
 } from "./constants";
-import { SupportsInterface, Wrapper, WrapperRegistry } from "./contracts";
+import { Approval, SupportsInterface, WrapperRegistry } from "./contracts";
 import type {
   ListingStructOutput,
   Marketplacev1,
@@ -194,11 +194,11 @@ export const getIsApproved = async (
   }
 
   const operatorToSet = wrapper || getContractsByNetwork(network).marketplace;
-  const contractToCallInstance: Wrapper = new ethers.Contract(
+  const contractToCallInstance: Approval = new ethers.Contract(
     implementationAddress,
     approvalContractABI,
     providerOrSigner
-  ) as Wrapper;
+  ) as Approval;
   try {
     // If we have a wrapper, this essentially becomes "wrapper.isApprovedForAll(from,wrapper)"
     const isApproved = await contractToCallInstance.isApprovedForAll(
