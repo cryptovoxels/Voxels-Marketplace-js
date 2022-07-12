@@ -1,5 +1,5 @@
 {
-  "name": "voxels-marketplace-js",
+  "name": "@cryptovoxels/marketplace-js",
   "version": "0.0.1",
   "description": "A simple JS sdk to interact with Voxels' marketplace",
   "main": "dist/index.js",

@@ -10,7 +10,7 @@ The graph repo is based [here](https://github.com/cryptovoxels/marketplace-subgr
 
 ## Setting up Dev environment.
 
-0. Clone repo `get clone https://github.com/cryptovoxels/Voxels-Marketplace-js.git`
+0. Clone repo `get clone https://github.com/cryptovoxels/marketplace-js.git`
 
 1. `npm i` to install the dependencies. If you encounter some issues, try LTS node v14.
 
