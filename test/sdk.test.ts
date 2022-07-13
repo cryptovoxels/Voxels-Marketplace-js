@@ -22,7 +22,8 @@ const sdk:VoxelsMarketplace = new VoxelsMarketplace(signer,'local')
 test('Setup()', async (t) => {
     const mockErc721Factory = new ethers.ContractFactory(MockERC721JSON.abi,MockERC721JSON.bytecode,signer)
     mockERC721 = await mockErc721Factory.deploy()
-    mockERC721.mint(1)
+    await mockERC721.mint(1)
+    await mockERC721.mint(2)
     t.end()
 })
 
@@ -58,8 +59,11 @@ test('SDK list item', async (assert) => {
         acceptedPayment:ethers.constants.AddressZero
     }
     
-    let p = await sdk.listItem(params)
-    assert.ok(p)
+    let listing = await sdk.createListing(params)
+    assert.ok(listing)
+
+    let listing2 = await sdk.createListing(Object.assign(params,{token_id:'2'}))
+    assert.ok(listing2)
     assert.end()
 })
 
@@ -103,6 +107,33 @@ test('SDK Buy listing', async (assert) => {
         assert.ok(true)
     }catch(e:any){
         assert.fail(e||"Failed to purchase NFT")
+        assert.end()
+        return
+    }
+    
+    let listing = await sdk.getListing(id)
+    if(!listing){
+        assert.fail('Unexpected: No listing found')
+        assert.end()
+        return
+    }
+
+    assert.equal(listing.quantity.toNumber(),0,"Quantity should be zero")
+    assert.end()
+
+})
+
+
+test('SDK Cancel listing', async (assert) => {
+    const wallet = await signer.getAddress()
+
+    const id = generateListingId(wallet,mockERC721.address,'2')
+    
+    try{
+        await sdk.connect(signer).cancelListing(id)
+        assert.ok(true)
+    }catch(e:any){
+        assert.fail(e||"Failed to cancel NFT listing")
         assert.end()
         return
     }

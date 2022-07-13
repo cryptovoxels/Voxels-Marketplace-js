@@ -14,7 +14,7 @@ import {
   Network,
   ProviderOrSigner,
 } from "./types";
-const approvalContractABI = require("../abis/approvalabi.json");
+const approvalContractABI = require("../abis/approval.json");
 const wrapperRegistryABI = require("../abis/wrapperRegistry.json");
 const supportsInterfaceABI = require("../abis/supportsInterface.json");
 

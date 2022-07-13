@@ -175,48 +175,6 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "address",
-        name: "seller",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "buyer",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "contractAddress",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "price",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "quantity",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "accesptedPayment",
-        type: "address",
-      },
-      {
-        indexed: true,
         internalType: "bytes32",
         name: "listingId",
         type: "bytes32",
@@ -230,7 +188,13 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "saledDate",
+        name: "quantity",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "saleDate",
         type: "uint256",
       },
     ],
@@ -242,48 +206,6 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "address",
-        name: "seller",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "buyer",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "contractAddress",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "price",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "quantity",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "accesptedPayment",
-        type: "address",
-      },
-      {
-        indexed: true,
         internalType: "bytes32",
         name: "listingId",
         type: "bytes32",
@@ -297,7 +219,13 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "saledDate",
+        name: "quantity",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "saleDate",
         type: "uint256",
       },
     ],
@@ -333,6 +261,19 @@ const _abi = [
   {
     inputs: [],
     name: "IID_IERC1155",
+    outputs: [
+      {
+        internalType: "bytes4",
+        name: "",
+        type: "bytes4",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "IID_IERC2981",
     outputs: [
       {
         internalType: "bytes4",
@@ -382,6 +323,29 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "bytes32[]",
+        name: "ids",
+        type: "bytes32[]",
+      },
+      {
+        internalType: "uint256[]",
+        name: "listingIndexes",
+        type: "uint256[]",
+      },
+      {
+        internalType: "uint256[]",
+        name: "quantities",
+        type: "uint256[]",
+      },
+    ],
+    name: "buyBatch",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "bytes32",
         name: "id",
         type: "bytes32",
@@ -398,6 +362,24 @@ const _abi = [
       },
     ],
     name: "buyWithToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32[]",
+        name: "ids",
+        type: "bytes32[]",
+      },
+      {
+        internalType: "uint256[]",
+        name: "listingIndexes",
+        type: "uint256[]",
+      },
+    ],
+    name: "cancelBatch",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -422,7 +404,7 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "getIdCount",
+    name: "fee",
     outputs: [
       {
         internalType: "uint256",
@@ -492,119 +474,22 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "bytes32",
-        name: "listingId",
-        type: "bytes32",
+        internalType: "address",
+        name: "_nftAddress",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_from",
+        type: "address",
       },
     ],
-    name: "getListingCount",
+    name: "hasNFTApproval",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "bool",
         name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "id",
-        type: "bytes32",
-      },
-    ],
-    name: "getListings",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "seller",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "contractAddress",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "price",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "quantity",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "acceptedPayment",
-            type: "address",
-          },
-        ],
-        internalType: "struct Listing[]",
-        name: "",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "index",
-        type: "uint256",
-      },
-    ],
-    name: "getListingsAtIndex",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "seller",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "contractAddress",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "price",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "quantity",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "acceptedPayment",
-            type: "address",
-          },
-        ],
-        internalType: "struct Listing[]",
-        name: "",
-        type: "tuple[]",
+        type: "bool",
       },
     ],
     stateMutability: "view",
@@ -631,44 +516,6 @@ const _abi = [
     name: "initialize",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_address",
-        type: "address",
-      },
-    ],
-    name: "isERC1155",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_address",
-        type: "address",
-      },
-    ],
-    name: "isERC721",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
     type: "function",
   },
   {
@@ -718,11 +565,11 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "_address",
+        name: "_contract",
         type: "address",
       },
     ],
-    name: "isRegisteredContract",
+    name: "isRoyaltyStandard",
     outputs: [
       {
         internalType: "bool",
@@ -784,8 +631,13 @@ const _abi = [
     outputs: [
       {
         internalType: "bytes32",
-        name: "",
+        name: "id",
         type: "bytes32",
+      },
+      {
+        internalType: "uint256",
+        name: "index",
+        type: "uint256",
       },
     ],
     stateMutability: "nonpayable",
@@ -864,8 +716,57 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_nftContract",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_royaltier",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_percent",
+        type: "uint256",
+      },
+    ],
+    name: "registerRoyalty",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_nftContract",
+        type: "address",
+      },
+    ],
+    name: "removeRoyalty",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_fee",
+        type: "uint256",
+      },
+    ],
+    name: "setFee",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1003,6 +904,26 @@ const _abi = [
       },
     ],
     stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_tokenAddress",
+        type: "address",
+      },
+    ],
+    name: "withdrawERC20",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {

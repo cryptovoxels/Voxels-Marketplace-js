@@ -56,21 +56,20 @@ export type ListingStructOutput = [
 export interface Marketplacev1Interface extends utils.Interface {
   functions: {
     "IID_IERC1155()": FunctionFragment;
+    "IID_IERC2981()": FunctionFragment;
     "IID_IERC721()": FunctionFragment;
     "buy(bytes32,uint256,uint256)": FunctionFragment;
+    "buyBatch(bytes32[],uint256[],uint256[])": FunctionFragment;
     "buyWithToken(bytes32,uint256,uint256)": FunctionFragment;
+    "cancelBatch(bytes32[],uint256[])": FunctionFragment;
     "cancelList(bytes32,uint256)": FunctionFragment;
-    "getIdCount()": FunctionFragment;
+    "fee()": FunctionFragment;
     "getListing(bytes32,uint256)": FunctionFragment;
-    "getListingCount(bytes32)": FunctionFragment;
-    "getListings(bytes32)": FunctionFragment;
-    "getListingsAtIndex(uint256)": FunctionFragment;
+    "hasNFTApproval(address,address)": FunctionFragment;
     "initialize(address,address,address)": FunctionFragment;
-    "isERC1155(address)": FunctionFragment;
-    "isERC721(address)": FunctionFragment;
     "isExistId(bytes32)": FunctionFragment;
     "isListingValid(bytes32,uint256)": FunctionFragment;
-    "isRegisteredContract(address)": FunctionFragment;
+    "isRoyaltyStandard(address)": FunctionFragment;
     "isTrustedForwarder(address)": FunctionFragment;
     "list(address,uint256,uint256,uint256,address)": FunctionFragment;
     "maxPrice()": FunctionFragment;
@@ -79,7 +78,10 @@ export interface Marketplacev1Interface extends utils.Interface {
     "pause()": FunctionFragment;
     "paused()": FunctionFragment;
     "proxiableUUID()": FunctionFragment;
+    "registerRoyalty(address,address,uint256)": FunctionFragment;
+    "removeRoyalty(address)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "setFee(uint256)": FunctionFragment;
     "setMax(uint256)": FunctionFragment;
     "setMin(uint256)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
@@ -90,27 +92,28 @@ export interface Marketplacev1Interface extends utils.Interface {
     "upgradeTo(address)": FunctionFragment;
     "upgradeToAndCall(address,bytes)": FunctionFragment;
     "versionRecipient()": FunctionFragment;
+    "withdraw()": FunctionFragment;
+    "withdrawERC20(address)": FunctionFragment;
     "wrapperRegistry()": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
       | "IID_IERC1155"
+      | "IID_IERC2981"
       | "IID_IERC721"
       | "buy"
+      | "buyBatch"
       | "buyWithToken"
+      | "cancelBatch"
       | "cancelList"
-      | "getIdCount"
+      | "fee"
       | "getListing"
-      | "getListingCount"
-      | "getListings"
-      | "getListingsAtIndex"
+      | "hasNFTApproval"
       | "initialize"
-      | "isERC1155"
-      | "isERC721"
       | "isExistId"
       | "isListingValid"
-      | "isRegisteredContract"
+      | "isRoyaltyStandard"
       | "isTrustedForwarder"
       | "list"
       | "maxPrice"
@@ -119,7 +122,10 @@ export interface Marketplacev1Interface extends utils.Interface {
       | "pause"
       | "paused"
       | "proxiableUUID"
+      | "registerRoyalty"
+      | "removeRoyalty"
       | "renounceOwnership"
+      | "setFee"
       | "setMax"
       | "setMin"
       | "supportsInterface"
@@ -130,11 +136,17 @@ export interface Marketplacev1Interface extends utils.Interface {
       | "upgradeTo"
       | "upgradeToAndCall"
       | "versionRecipient"
+      | "withdraw"
+      | "withdrawERC20"
       | "wrapperRegistry"
   ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "IID_IERC1155",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "IID_IERC2981",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -150,6 +162,14 @@ export interface Marketplacev1Interface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "buyBatch",
+    values: [
+      PromiseOrValue<BytesLike>[],
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<BigNumberish>[]
+    ]
+  ): string;
+  encodeFunctionData(
     functionFragment: "buyWithToken",
     values: [
       PromiseOrValue<BytesLike>,
@@ -158,28 +178,21 @@ export interface Marketplacev1Interface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "cancelBatch",
+    values: [PromiseOrValue<BytesLike>[], PromiseOrValue<BigNumberish>[]]
+  ): string;
+  encodeFunctionData(
     functionFragment: "cancelList",
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<BigNumberish>]
   ): string;
-  encodeFunctionData(
-    functionFragment: "getIdCount",
-    values?: undefined
-  ): string;
+  encodeFunctionData(functionFragment: "fee", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getListing",
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getListingCount",
-    values: [PromiseOrValue<BytesLike>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getListings",
-    values: [PromiseOrValue<BytesLike>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getListingsAtIndex",
-    values: [PromiseOrValue<BigNumberish>]
+    functionFragment: "hasNFTApproval",
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
@@ -190,14 +203,6 @@ export interface Marketplacev1Interface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "isERC1155",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "isERC721",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "isExistId",
     values: [PromiseOrValue<BytesLike>]
   ): string;
@@ -206,7 +211,7 @@ export interface Marketplacev1Interface extends utils.Interface {
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "isRegisteredContract",
+    functionFragment: "isRoyaltyStandard",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
@@ -233,8 +238,24 @@ export interface Marketplacev1Interface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "registerRoyalty",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "removeRoyalty",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setFee",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "setMax",
@@ -273,6 +294,11 @@ export interface Marketplacev1Interface extends utils.Interface {
     functionFragment: "versionRecipient",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "withdrawERC20",
+    values: [PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
     functionFragment: "wrapperRegistry",
     values?: undefined
@@ -283,39 +309,38 @@ export interface Marketplacev1Interface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "IID_IERC2981",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "IID_IERC721",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "buy", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "buyBatch", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "buyWithToken",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "cancelBatch",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "cancelList", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getIdCount", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "fee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getListing", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getListingCount",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getListings",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getListingsAtIndex",
+    functionFragment: "hasNFTApproval",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "isERC1155", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "isERC721", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isExistId", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isListingValid",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "isRegisteredContract",
+    functionFragment: "isRoyaltyStandard",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -333,9 +358,18 @@ export interface Marketplacev1Interface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "registerRoyalty",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "removeRoyalty",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setFee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setMax", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setMin", data: BytesLike): Result;
   decodeFunctionResult(
@@ -364,6 +398,11 @@ export interface Marketplacev1Interface extends utils.Interface {
     functionFragment: "versionRecipient",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawERC20",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "wrapperRegistry",
     data: BytesLike
@@ -377,8 +416,8 @@ export interface Marketplacev1Interface extends utils.Interface {
     "NewListing(address,address,uint256,uint256,uint256,bytes32,uint256,address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
-    "Sale(address,address,address,uint256,uint256,uint256,address,bytes32,uint256,uint256)": EventFragment;
-    "SaleWithToken(address,address,address,uint256,uint256,uint256,address,bytes32,uint256,uint256)": EventFragment;
+    "Sale(bytes32,uint256,uint256,uint256)": EventFragment;
+    "SaleWithToken(bytes32,uint256,uint256,uint256)": EventFragment;
     "Unpaused(address)": EventFragment;
     "Upgraded(address)": EventFragment;
   };
@@ -484,60 +523,26 @@ export type PausedEvent = TypedEvent<[string], PausedEventObject>;
 export type PausedEventFilter = TypedEventFilter<PausedEvent>;
 
 export interface SaleEventObject {
-  seller: string;
-  buyer: string;
-  contractAddress: string;
-  tokenId: BigNumber;
-  price: BigNumber;
-  quantity: BigNumber;
-  accesptedPayment: string;
   listingId: string;
   listingIndex: BigNumber;
-  saledDate: BigNumber;
+  quantity: BigNumber;
+  saleDate: BigNumber;
 }
 export type SaleEvent = TypedEvent<
-  [
-    string,
-    string,
-    string,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    string,
-    string,
-    BigNumber,
-    BigNumber
-  ],
+  [string, BigNumber, BigNumber, BigNumber],
   SaleEventObject
 >;
 
 export type SaleEventFilter = TypedEventFilter<SaleEvent>;
 
 export interface SaleWithTokenEventObject {
-  seller: string;
-  buyer: string;
-  contractAddress: string;
-  tokenId: BigNumber;
-  price: BigNumber;
-  quantity: BigNumber;
-  accesptedPayment: string;
   listingId: string;
   listingIndex: BigNumber;
-  saledDate: BigNumber;
+  quantity: BigNumber;
+  saleDate: BigNumber;
 }
 export type SaleWithTokenEvent = TypedEvent<
-  [
-    string,
-    string,
-    string,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    string,
-    string,
-    BigNumber,
-    BigNumber
-  ],
+  [string, BigNumber, BigNumber, BigNumber],
   SaleWithTokenEventObject
 >;
 
@@ -586,12 +591,21 @@ export interface Marketplacev1 extends BaseContract {
   functions: {
     IID_IERC1155(overrides?: CallOverrides): Promise<[string]>;
 
+    IID_IERC2981(overrides?: CallOverrides): Promise<[string]>;
+
     IID_IERC721(overrides?: CallOverrides): Promise<[string]>;
 
     buy(
       id: PromiseOrValue<BytesLike>,
       listingIndex: PromiseOrValue<BigNumberish>,
       quantity: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    buyBatch(
+      ids: PromiseOrValue<BytesLike>[],
+      listingIndexes: PromiseOrValue<BigNumberish>[],
+      quantities: PromiseOrValue<BigNumberish>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -602,13 +616,19 @@ export interface Marketplacev1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    cancelBatch(
+      ids: PromiseOrValue<BytesLike>[],
+      listingIndexes: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     cancelList(
       id: PromiseOrValue<BytesLike>,
       listingIndex: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    getIdCount(overrides?: CallOverrides): Promise<[BigNumber]>;
+    fee(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getListing(
       id: PromiseOrValue<BytesLike>,
@@ -616,20 +636,11 @@ export interface Marketplacev1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[ListingStructOutput]>;
 
-    getListingCount(
-      listingId: PromiseOrValue<BytesLike>,
+    hasNFTApproval(
+      _nftAddress: PromiseOrValue<string>,
+      _from: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    getListings(
-      id: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<[ListingStructOutput[]]>;
-
-    getListingsAtIndex(
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[ListingStructOutput[]]>;
+    ): Promise<[boolean]>;
 
     initialize(
       _registryAddress: PromiseOrValue<string>,
@@ -637,16 +648,6 @@ export interface Marketplacev1 extends BaseContract {
       _forwarder: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-
-    isERC1155(
-      _address: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    isERC721(
-      _address: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
 
     isExistId(
       id: PromiseOrValue<BytesLike>,
@@ -659,8 +660,8 @@ export interface Marketplacev1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    isRegisteredContract(
-      _address: PromiseOrValue<string>,
+    isRoyaltyStandard(
+      _contract: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
@@ -692,7 +693,24 @@ export interface Marketplacev1 extends BaseContract {
 
     proxiableUUID(overrides?: CallOverrides): Promise<[string]>;
 
+    registerRoyalty(
+      _nftContract: PromiseOrValue<string>,
+      _royaltier: PromiseOrValue<string>,
+      _percent: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    removeRoyalty(
+      _nftContract: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setFee(
+      _fee: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -740,10 +758,21 @@ export interface Marketplacev1 extends BaseContract {
 
     versionRecipient(overrides?: CallOverrides): Promise<[string]>;
 
+    withdraw(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    withdrawERC20(
+      _tokenAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     wrapperRegistry(overrides?: CallOverrides): Promise<[string]>;
   };
 
   IID_IERC1155(overrides?: CallOverrides): Promise<string>;
+
+  IID_IERC2981(overrides?: CallOverrides): Promise<string>;
 
   IID_IERC721(overrides?: CallOverrides): Promise<string>;
 
@@ -754,10 +783,23 @@ export interface Marketplacev1 extends BaseContract {
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  buyBatch(
+    ids: PromiseOrValue<BytesLike>[],
+    listingIndexes: PromiseOrValue<BigNumberish>[],
+    quantities: PromiseOrValue<BigNumberish>[],
+    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   buyWithToken(
     id: PromiseOrValue<BytesLike>,
     listingIndex: PromiseOrValue<BigNumberish>,
     quantity: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  cancelBatch(
+    ids: PromiseOrValue<BytesLike>[],
+    listingIndexes: PromiseOrValue<BigNumberish>[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -767,7 +809,7 @@ export interface Marketplacev1 extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  getIdCount(overrides?: CallOverrides): Promise<BigNumber>;
+  fee(overrides?: CallOverrides): Promise<BigNumber>;
 
   getListing(
     id: PromiseOrValue<BytesLike>,
@@ -775,20 +817,11 @@ export interface Marketplacev1 extends BaseContract {
     overrides?: CallOverrides
   ): Promise<ListingStructOutput>;
 
-  getListingCount(
-    listingId: PromiseOrValue<BytesLike>,
+  hasNFTApproval(
+    _nftAddress: PromiseOrValue<string>,
+    _from: PromiseOrValue<string>,
     overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  getListings(
-    id: PromiseOrValue<BytesLike>,
-    overrides?: CallOverrides
-  ): Promise<ListingStructOutput[]>;
-
-  getListingsAtIndex(
-    index: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<ListingStructOutput[]>;
+  ): Promise<boolean>;
 
   initialize(
     _registryAddress: PromiseOrValue<string>,
@@ -796,16 +829,6 @@ export interface Marketplacev1 extends BaseContract {
     _forwarder: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
-
-  isERC1155(
-    _address: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  isERC721(
-    _address: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
 
   isExistId(
     id: PromiseOrValue<BytesLike>,
@@ -818,8 +841,8 @@ export interface Marketplacev1 extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  isRegisteredContract(
-    _address: PromiseOrValue<string>,
+  isRoyaltyStandard(
+    _contract: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
@@ -851,7 +874,24 @@ export interface Marketplacev1 extends BaseContract {
 
   proxiableUUID(overrides?: CallOverrides): Promise<string>;
 
+  registerRoyalty(
+    _nftContract: PromiseOrValue<string>,
+    _royaltier: PromiseOrValue<string>,
+    _percent: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  removeRoyalty(
+    _nftContract: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   renounceOwnership(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setFee(
+    _fee: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -899,10 +939,21 @@ export interface Marketplacev1 extends BaseContract {
 
   versionRecipient(overrides?: CallOverrides): Promise<string>;
 
+  withdraw(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  withdrawERC20(
+    _tokenAddress: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   wrapperRegistry(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
     IID_IERC1155(overrides?: CallOverrides): Promise<string>;
+
+    IID_IERC2981(overrides?: CallOverrides): Promise<string>;
 
     IID_IERC721(overrides?: CallOverrides): Promise<string>;
 
@@ -913,10 +964,23 @@ export interface Marketplacev1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    buyBatch(
+      ids: PromiseOrValue<BytesLike>[],
+      listingIndexes: PromiseOrValue<BigNumberish>[],
+      quantities: PromiseOrValue<BigNumberish>[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     buyWithToken(
       id: PromiseOrValue<BytesLike>,
       listingIndex: PromiseOrValue<BigNumberish>,
       quantity: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    cancelBatch(
+      ids: PromiseOrValue<BytesLike>[],
+      listingIndexes: PromiseOrValue<BigNumberish>[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -926,7 +990,7 @@ export interface Marketplacev1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    getIdCount(overrides?: CallOverrides): Promise<BigNumber>;
+    fee(overrides?: CallOverrides): Promise<BigNumber>;
 
     getListing(
       id: PromiseOrValue<BytesLike>,
@@ -934,20 +998,11 @@ export interface Marketplacev1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<ListingStructOutput>;
 
-    getListingCount(
-      listingId: PromiseOrValue<BytesLike>,
+    hasNFTApproval(
+      _nftAddress: PromiseOrValue<string>,
+      _from: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getListings(
-      id: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<ListingStructOutput[]>;
-
-    getListingsAtIndex(
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<ListingStructOutput[]>;
+    ): Promise<boolean>;
 
     initialize(
       _registryAddress: PromiseOrValue<string>,
@@ -955,16 +1010,6 @@ export interface Marketplacev1 extends BaseContract {
       _forwarder: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    isERC1155(
-      _address: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    isERC721(
-      _address: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
 
     isExistId(
       id: PromiseOrValue<BytesLike>,
@@ -977,8 +1022,8 @@ export interface Marketplacev1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    isRegisteredContract(
-      _address: PromiseOrValue<string>,
+    isRoyaltyStandard(
+      _contract: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
@@ -994,7 +1039,7 @@ export interface Marketplacev1 extends BaseContract {
       quantity: PromiseOrValue<BigNumberish>,
       acceptedPayment: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<string>;
+    ): Promise<[string, BigNumber] & { id: string; index: BigNumber }>;
 
     maxPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1008,7 +1053,24 @@ export interface Marketplacev1 extends BaseContract {
 
     proxiableUUID(overrides?: CallOverrides): Promise<string>;
 
+    registerRoyalty(
+      _nftContract: PromiseOrValue<string>,
+      _royaltier: PromiseOrValue<string>,
+      _percent: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    removeRoyalty(
+      _nftContract: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    setFee(
+      _fee: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setMax(
       t: PromiseOrValue<BigNumberish>,
@@ -1051,6 +1113,13 @@ export interface Marketplacev1 extends BaseContract {
     ): Promise<void>;
 
     versionRecipient(overrides?: CallOverrides): Promise<string>;
+
+    withdraw(overrides?: CallOverrides): Promise<void>;
+
+    withdrawERC20(
+      _tokenAddress: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     wrapperRegistry(overrides?: CallOverrides): Promise<string>;
   };
@@ -1121,54 +1190,30 @@ export interface Marketplacev1 extends BaseContract {
     "Paused(address)"(account?: null): PausedEventFilter;
     Paused(account?: null): PausedEventFilter;
 
-    "Sale(address,address,address,uint256,uint256,uint256,address,bytes32,uint256,uint256)"(
-      seller?: PromiseOrValue<string> | null,
-      buyer?: PromiseOrValue<string> | null,
-      contractAddress?: null,
-      tokenId?: null,
-      price?: null,
-      quantity?: null,
-      accesptedPayment?: null,
+    "Sale(bytes32,uint256,uint256,uint256)"(
       listingId?: PromiseOrValue<BytesLike> | null,
       listingIndex?: null,
-      saledDate?: null
+      quantity?: null,
+      saleDate?: null
     ): SaleEventFilter;
     Sale(
-      seller?: PromiseOrValue<string> | null,
-      buyer?: PromiseOrValue<string> | null,
-      contractAddress?: null,
-      tokenId?: null,
-      price?: null,
-      quantity?: null,
-      accesptedPayment?: null,
       listingId?: PromiseOrValue<BytesLike> | null,
       listingIndex?: null,
-      saledDate?: null
+      quantity?: null,
+      saleDate?: null
     ): SaleEventFilter;
 
-    "SaleWithToken(address,address,address,uint256,uint256,uint256,address,bytes32,uint256,uint256)"(
-      seller?: PromiseOrValue<string> | null,
-      buyer?: PromiseOrValue<string> | null,
-      contractAddress?: null,
-      tokenId?: null,
-      price?: null,
-      quantity?: null,
-      accesptedPayment?: null,
+    "SaleWithToken(bytes32,uint256,uint256,uint256)"(
       listingId?: PromiseOrValue<BytesLike> | null,
       listingIndex?: null,
-      saledDate?: null
+      quantity?: null,
+      saleDate?: null
     ): SaleWithTokenEventFilter;
     SaleWithToken(
-      seller?: PromiseOrValue<string> | null,
-      buyer?: PromiseOrValue<string> | null,
-      contractAddress?: null,
-      tokenId?: null,
-      price?: null,
-      quantity?: null,
-      accesptedPayment?: null,
       listingId?: PromiseOrValue<BytesLike> | null,
       listingIndex?: null,
-      saledDate?: null
+      quantity?: null,
+      saleDate?: null
     ): SaleWithTokenEventFilter;
 
     "Unpaused(address)"(account?: null): UnpausedEventFilter;
@@ -1185,12 +1230,21 @@ export interface Marketplacev1 extends BaseContract {
   estimateGas: {
     IID_IERC1155(overrides?: CallOverrides): Promise<BigNumber>;
 
+    IID_IERC2981(overrides?: CallOverrides): Promise<BigNumber>;
+
     IID_IERC721(overrides?: CallOverrides): Promise<BigNumber>;
 
     buy(
       id: PromiseOrValue<BytesLike>,
       listingIndex: PromiseOrValue<BigNumberish>,
       quantity: PromiseOrValue<BigNumberish>,
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    buyBatch(
+      ids: PromiseOrValue<BytesLike>[],
+      listingIndexes: PromiseOrValue<BigNumberish>[],
+      quantities: PromiseOrValue<BigNumberish>[],
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1201,13 +1255,19 @@ export interface Marketplacev1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    cancelBatch(
+      ids: PromiseOrValue<BytesLike>[],
+      listingIndexes: PromiseOrValue<BigNumberish>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     cancelList(
       id: PromiseOrValue<BytesLike>,
       listingIndex: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    getIdCount(overrides?: CallOverrides): Promise<BigNumber>;
+    fee(overrides?: CallOverrides): Promise<BigNumber>;
 
     getListing(
       id: PromiseOrValue<BytesLike>,
@@ -1215,18 +1275,9 @@ export interface Marketplacev1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getListingCount(
-      listingId: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getListings(
-      id: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getListingsAtIndex(
-      index: PromiseOrValue<BigNumberish>,
+    hasNFTApproval(
+      _nftAddress: PromiseOrValue<string>,
+      _from: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1235,16 +1286,6 @@ export interface Marketplacev1 extends BaseContract {
       _wrapperRegistry: PromiseOrValue<string>,
       _forwarder: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    isERC1155(
-      _address: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    isERC721(
-      _address: PromiseOrValue<string>,
-      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     isExistId(
@@ -1258,8 +1299,8 @@ export interface Marketplacev1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    isRegisteredContract(
-      _address: PromiseOrValue<string>,
+    isRoyaltyStandard(
+      _contract: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1291,7 +1332,24 @@ export interface Marketplacev1 extends BaseContract {
 
     proxiableUUID(overrides?: CallOverrides): Promise<BigNumber>;
 
+    registerRoyalty(
+      _nftContract: PromiseOrValue<string>,
+      _royaltier: PromiseOrValue<string>,
+      _percent: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    removeRoyalty(
+      _nftContract: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setFee(
+      _fee: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1339,11 +1397,22 @@ export interface Marketplacev1 extends BaseContract {
 
     versionRecipient(overrides?: CallOverrides): Promise<BigNumber>;
 
+    withdraw(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    withdrawERC20(
+      _tokenAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     wrapperRegistry(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
     IID_IERC1155(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    IID_IERC2981(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     IID_IERC721(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1354,10 +1423,23 @@ export interface Marketplacev1 extends BaseContract {
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    buyBatch(
+      ids: PromiseOrValue<BytesLike>[],
+      listingIndexes: PromiseOrValue<BigNumberish>[],
+      quantities: PromiseOrValue<BigNumberish>[],
+      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     buyWithToken(
       id: PromiseOrValue<BytesLike>,
       listingIndex: PromiseOrValue<BigNumberish>,
       quantity: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    cancelBatch(
+      ids: PromiseOrValue<BytesLike>[],
+      listingIndexes: PromiseOrValue<BigNumberish>[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1367,7 +1449,7 @@ export interface Marketplacev1 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    getIdCount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    fee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getListing(
       id: PromiseOrValue<BytesLike>,
@@ -1375,18 +1457,9 @@ export interface Marketplacev1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getListingCount(
-      listingId: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getListings(
-      id: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getListingsAtIndex(
-      index: PromiseOrValue<BigNumberish>,
+    hasNFTApproval(
+      _nftAddress: PromiseOrValue<string>,
+      _from: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1395,16 +1468,6 @@ export interface Marketplacev1 extends BaseContract {
       _wrapperRegistry: PromiseOrValue<string>,
       _forwarder: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    isERC1155(
-      _address: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isERC721(
-      _address: PromiseOrValue<string>,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     isExistId(
@@ -1418,8 +1481,8 @@ export interface Marketplacev1 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    isRegisteredContract(
-      _address: PromiseOrValue<string>,
+    isRoyaltyStandard(
+      _contract: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1451,7 +1514,24 @@ export interface Marketplacev1 extends BaseContract {
 
     proxiableUUID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    registerRoyalty(
+      _nftContract: PromiseOrValue<string>,
+      _royaltier: PromiseOrValue<string>,
+      _percent: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    removeRoyalty(
+      _nftContract: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setFee(
+      _fee: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1498,6 +1578,15 @@ export interface Marketplacev1 extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     versionRecipient(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    withdraw(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    withdrawERC20(
+      _tokenAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     wrapperRegistry(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
