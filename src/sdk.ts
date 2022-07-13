@@ -47,12 +47,12 @@ export class VoxelsMarketplace extends EventEmitter {
       this.logger = logger;
     }
   }
-/**
- * handles the given provider or signer from constructor
- * @param providerOrSigner ethers Provider or Signer
- * @param network a network; see Network types;
- * @returns 
- */
+  /**
+   * handles the given provider or signer from constructor
+   * @param providerOrSigner ethers Provider or Signer
+   * @param network a network; see Network types;
+   * @returns
+   */
   private handleProviderOrSigner(
     providerOrSigner: ProviderOrSigner,
     network: Network
@@ -66,7 +66,7 @@ export class VoxelsMarketplace extends EventEmitter {
    * Get a listing from the contract directly given a hash id and index
    * @param id a hash representing the listings list for given user+contract+tokenid
    * @param index index of the listing inside the listings[] array (default 0)
-   * @returns 
+   * @returns
    */
   getListing = async (id: ListingId, index: number = 0) => {
     if (!this.contractInstance) {
@@ -89,7 +89,7 @@ export class VoxelsMarketplace extends EventEmitter {
   /**
    * list an NFT given the parameters
    * @param params an object containing parameters about the listing: token_id, address,price,quantity,acceptedPayment
-   * @returns 
+   * @returns
    */
   createListing = async (params: ListingParams) => {
     if (!this.contractInstance) {
@@ -272,8 +272,7 @@ export class VoxelsMarketplace extends EventEmitter {
     return receipt.status;
   };
 
-  cancelListing = async (id: ListingId,index:number=0) => {
-
+  cancelListing = async (id: ListingId, index: number = 0) => {
     if (!this.contractInstance) {
       throw Error("SDK not initialized");
     }
@@ -284,10 +283,7 @@ export class VoxelsMarketplace extends EventEmitter {
     //list item
     let tx;
     try {
-      tx = await this.contractInstance.cancelList(
-        id,
-        index
-      );
+      tx = await this.contractInstance.cancelList(id, index);
     } catch (e: any) {
       const err = e.toString ? e.toString() : e;
       this.logger(err);

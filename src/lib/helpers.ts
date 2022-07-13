@@ -6,9 +6,7 @@ import {
   ERC721_INTERFACE_ID,
 } from "./constants";
 import { Approval, SupportsInterface, WrapperRegistry } from "./contracts";
-import type {
-  Marketplacev1,
-} from "./contracts/Marketplacev1";
+import type { Marketplacev1 } from "./contracts/Marketplacev1";
 import {
   address,
   ContractsByNetwork,
