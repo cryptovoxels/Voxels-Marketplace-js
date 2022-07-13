@@ -7,14 +7,11 @@ import {
 } from "./constants";
 import { Approval, SupportsInterface, WrapperRegistry } from "./contracts";
 import type {
-  ListingStructOutput,
   Marketplacev1,
 } from "./contracts/Marketplacev1";
 import {
   address,
   ContractsByNetwork,
-  ListingIndexes,
-  ListingInfo,
   ListingParams,
   Network,
   ProviderOrSigner,

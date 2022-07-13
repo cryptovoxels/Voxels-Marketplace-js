@@ -45,7 +45,7 @@ It's not a great behavior especially if we need a sticky `env` file in the futur
 
 ## How to use
 
-1. install with `npm i voxels-marketplace-js`
+1. install with `npm i @cryptovoxels/marketplace-js`
 
 2. Use
 
@@ -67,8 +67,11 @@ await marketplace.list(myItemToList)
 
 ## Todo:
 
-- [] Write tests (and tests on localhost blockchain network)
-- [] Make examples on how to use
-- [] Maybe test if we can integrate payments via GSN
-- [] Add api calls to an api;
-- [] Optimize?
+- [x] Write tests (and tests on localhost blockchain network)
+- [ ] Handle all errors and display them appropriately
+- [ ] Make examples on how to use
+- [ ] add other chains contracts
+- [ ] add GSN support if possible
+- [ ] Maybe test if we can integrate payments via GSN
+- [ ] Add api calls to an api (subgraph?);
+- [ ] Optimize?

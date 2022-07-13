@@ -14,10 +14,7 @@ import {
 } from "./lib/helpers";
 import {
   IndexingObject,
-  IndexingParameters,
   ListingId,
-  ListingIndexes,
-  ListingInfo,
   ListingParams,
   Network,
   ProviderOrSigner,
@@ -50,7 +47,12 @@ export class VoxelsMarketplace extends EventEmitter {
       this.logger = logger;
     }
   }
-
+/**
+ * handles the given provider or signer from constructor
+ * @param providerOrSigner ethers Provider or Signer
+ * @param network a network; see Network types;
+ * @returns 
+ */
   private handleProviderOrSigner(
     providerOrSigner: ProviderOrSigner,
     network: Network
@@ -60,7 +62,12 @@ export class VoxelsMarketplace extends EventEmitter {
     }
     return providerOrSigner;
   }
-
+  /**
+   * Get a listing from the contract directly given a hash id and index
+   * @param id a hash representing the listings list for given user+contract+tokenid
+   * @param index index of the listing inside the listings[] array (default 0)
+   * @returns 
+   */
   getListing = async (id: ListingId, index: number = 0) => {
     if (!this.contractInstance) {
       throw Error("SDK not initialized");
@@ -79,8 +86,12 @@ export class VoxelsMarketplace extends EventEmitter {
       return;
     }
   };
-
-  listItem = async (params: ListingParams) => {
+  /**
+   * list an NFT given the parameters
+   * @param params an object containing parameters about the listing: token_id, address,price,quantity,acceptedPayment
+   * @returns 
+   */
+  createListing = async (params: ListingParams) => {
     if (!this.contractInstance) {
       throw Error("SDK not initialized");
     }
@@ -154,7 +165,8 @@ export class VoxelsMarketplace extends EventEmitter {
 
   /**
    * Purchase an NFT listed given an id or its listing parameters.
-   * @param indexes object representing the indexes to use to find the listing: ID+index
+   * @param id hash representing the id of the list of listings for the given user+contract+tokenId
+   * @param index index of the listing inside the list of listings
    * @param quantityToPurchase Quantity of the NFT to purchase
    * @returns
    */
@@ -260,11 +272,8 @@ export class VoxelsMarketplace extends EventEmitter {
     return receipt.status;
   };
 
-  cancelListing = async (indexes: IndexingParameters) => {
-    const indexingObject: IndexingObject = indexes as IndexingObject;
-    if (typeof indexingObject.index == "undefined") {
-      indexingObject.index = 0;
-    }
+  cancelListing = async (id: ListingId,index:number=0) => {
+
     if (!this.contractInstance) {
       throw Error("SDK not initialized");
     }
@@ -276,8 +285,8 @@ export class VoxelsMarketplace extends EventEmitter {
     let tx;
     try {
       tx = await this.contractInstance.cancelList(
-        indexingObject.id,
-        indexingObject.index
+        id,
+        index
       );
     } catch (e: any) {
       const err = e.toString ? e.toString() : e;

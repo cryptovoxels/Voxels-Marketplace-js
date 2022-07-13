@@ -42,7 +42,7 @@ export interface ContractsByNetwork {
   tokenRegistry: string;
 }
 
-export type IndexingParameters = {
+type IndexingParameters = {
   id: ListingId;
   index?: number;
 };
