@@ -21,6 +21,7 @@
   "files": [
     "dist"
   ],
+  "keywords": ["marketplace","nft","web3","Voxels","cryptovoxels"],
   "types": "dist/index.d.ts",
   "dependencies": {
     "dotenv": "^16.0.1",
