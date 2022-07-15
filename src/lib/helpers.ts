@@ -10,6 +10,7 @@ import type { Marketplacev1 } from "./contracts/Marketplacev1";
 import {
   address,
   ContractsByNetwork,
+  EventNames,
   ListingParams,
   Network,
   ProviderOrSigner,
@@ -215,7 +216,7 @@ export const askApproval = async (
   implementationAddress: string,
   userWallet: string,
   network: Network,
-  emit?: (event: string, ...args: any[]) => void
+  emit?: (event: EventNames, ...args: any[]) => void
 ) => {
   if (!contract) {
     throw Error("SDK not initialized");

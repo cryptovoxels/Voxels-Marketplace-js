@@ -13,6 +13,7 @@ import {
   validateListingParams,
 } from "./lib/helpers";
 import {
+  EventNames,
   IndexingObject,
   ListingId,
   ListingParams,
@@ -26,6 +27,7 @@ export class VoxelsMarketplace extends EventEmitter {
   private contractInstance: Marketplacev1;
   private network: Network;
   private logger: (args: string) => void = console.log;
+  private emitEvent = (eventName:EventNames,...args:any[])=>this.emit(eventName,args)
   constructor(
     providerOrSigner: ProviderOrSigner,
     network: Network = "mainnet",
@@ -82,7 +84,7 @@ export class VoxelsMarketplace extends EventEmitter {
     } catch (e: any) {
       const err = e.toString ? e.toString() : e;
       this.logger(err);
-      this.emit("error", err);
+      this.emitEvent("error", err);
       return;
     }
   };
@@ -124,7 +126,7 @@ export class VoxelsMarketplace extends EventEmitter {
         validatedParams.address,
         userWallet,
         this.network,
-        this.emit.bind(this)
+        this.emitEvent.bind(this)
       );
       if (!isApproved) {
         // Cannot list if not approved
@@ -132,7 +134,7 @@ export class VoxelsMarketplace extends EventEmitter {
       }
     }
 
-    this.emit("@:tx-started");
+    this.emitEvent("@:tx-start");
     //list item
     let tx;
     try {
@@ -146,20 +148,20 @@ export class VoxelsMarketplace extends EventEmitter {
     } catch (e: any) {
       const err = e.toString ? e.toString() : e;
       this.logger(err);
-      this.emit("@:error", err);
+      this.emitEvent("error", err);
       return;
     }
-    this.emit("@:tx-hash", { hash: tx.hash });
+    this.emitEvent("@:tx-hash", { hash: tx.hash });
     let receipt;
     try {
       receipt = await handleTransaction(tx);
     } catch (e: any) {
       const err = e.toString ? e.toString() : e;
       this.logger(err);
-      this.emit("error", err);
+      this.emitEvent("error", err);
       return;
     }
-    this.emit("@:tx-mined", { hash: receipt.transactionHash });
+    this.emitEvent("@:tx-mined", { hash: receipt.transactionHash });
     return receipt;
   };
 
@@ -208,7 +210,7 @@ export class VoxelsMarketplace extends EventEmitter {
     indexes: IndexingObject,
     quantityToPurchase: number
   ) => {
-    this.emit("@:tx-started");
+    this.emitEvent("@:tx-start");
     //list item
     let tx;
     try {
@@ -220,20 +222,20 @@ export class VoxelsMarketplace extends EventEmitter {
     } catch (e: any) {
       const err = e.toString ? e.toString() : e;
       this.logger(err);
-      this.emit("error", err);
+      this.emitEvent("error", err);
       return;
     }
-    this.emit("@:tx-hash", { hash: tx.hash });
+    this.emitEvent("@:tx-hash", { hash: tx.hash });
     let receipt;
     try {
       receipt = await handleTransaction(tx);
     } catch (e: any) {
       const err = e.toString ? e.toString() : e;
       this.logger(err);
-      this.emit("error", err);
+      this.emitEvent("error", err);
       return;
     }
-    this.emit("@:tx-mined", { hash: receipt.transactionHash });
+    this.emitEvent("@:tx-mined", { hash: receipt.transactionHash });
     return receipt.status;
   };
 
@@ -242,7 +244,7 @@ export class VoxelsMarketplace extends EventEmitter {
     value: string,
     quantityToPurchase: number
   ) => {
-    this.emit("@:tx-started");
+    this.emitEvent("@:tx-start");
     //list item
     let tx;
     try {
@@ -255,20 +257,20 @@ export class VoxelsMarketplace extends EventEmitter {
     } catch (e: any) {
       const err = e.toString ? e.toString() : e;
       this.logger(err);
-      this.emit("error", err);
+      this.emitEvent("error", err);
       return;
     }
-    this.emit("@:tx-hash", { hash: tx.hash });
+    this.emitEvent("@:tx-hash", { hash: tx.hash });
     let receipt;
     try {
       receipt = await handleTransaction(tx);
     } catch (e: any) {
       const err = e.toString ? e.toString() : e;
       this.logger(err);
-      this.emit("error", err);
+      this.emitEvent("error", err);
       return;
     }
-    this.emit("@:tx-mined", { hash: receipt.transactionHash });
+    this.emitEvent("@:tx-mined", { hash: receipt.transactionHash });
     return receipt.status;
   };
 
@@ -279,7 +281,7 @@ export class VoxelsMarketplace extends EventEmitter {
     if (isProvider(this.providerOrSigner)) {
       throw Error("Use a Signer to cancel a listing");
     }
-    this.emit("@:tx-started");
+    this.emitEvent("@:tx-start");
     //list item
     let tx;
     try {
@@ -287,20 +289,20 @@ export class VoxelsMarketplace extends EventEmitter {
     } catch (e: any) {
       const err = e.toString ? e.toString() : e;
       this.logger(err);
-      this.emit("error", err);
+      this.emitEvent("error", err);
       return;
     }
-    this.emit("@:tx-hash", { hash: tx.hash });
+    this.emitEvent("@:tx-hash", { hash: tx.hash });
     let receipt;
     try {
       receipt = await handleTransaction(tx);
     } catch (e: any) {
       const err = e.toString ? e.toString() : e;
       this.logger(err);
-      this.emit("error", err);
+      this.emitEvent("error", err);
       return;
     }
-    this.emit("@:tx-mined", { hash: receipt.transactionHash });
+    this.emitEvent("@:tx-mined", { hash: receipt.transactionHash });
     return receipt.status;
   };
 

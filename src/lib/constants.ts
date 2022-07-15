@@ -6,9 +6,9 @@ export const WRAPPER_INTERFACE_ID = `0xfe939973`;
 
 export const CONTRACTS: Record<Network, ContractsByNetwork> = {
   mumbai: {
-    wrapperRegistry: `0x023D0F59046A9E9b3129cdc7e4555eF82D265cD8`,
-    marketplace: `0x4e172BA6A1AF2FD69A60f9B5c9B33723018E51be`,
-    tokenRegistry: `0x1830a2bf63d41165cc1f43e4eE4A75528a2F98A4`,
+    wrapperRegistry: `0xABbE873F8f735D8F86A65500635a838268c81180`,
+    marketplace: `0xa75BC4AEeB26e7E3ed7Ee54D8B19D23501866132`,
+    tokenRegistry: `0xBE06783f7a02cFF726c0d4A6F11e8B3c237030a3`,
   },
   polygon: {
     tokenRegistry: ``,
