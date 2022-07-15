@@ -27,7 +27,8 @@ export class VoxelsMarketplace extends EventEmitter {
   private contractInstance: Marketplacev1;
   private network: Network;
   private logger: (args: string) => void = console.log;
-  private emitEvent = (eventName:EventNames,...args:any[])=>this.emit(eventName,args)
+  private emitEvent = (eventName: EventNames, ...args: any[]) =>
+    this.emit(eventName, args);
   constructor(
     providerOrSigner: ProviderOrSigner,
     network: Network = "mainnet",

@@ -48,6 +48,9 @@ type IndexingParameters = {
 };
 export type IndexingObject = Required<IndexingParameters>;
 
-type StandardEventName = '@:tx-start' |'@:tx-hash' | '@:tx-mined'
-type ApprovalEventName = 'approval:tx-start' |'approval:tx-hash' | 'approval:tx-mined'
-export type EventNames = StandardEventName |ApprovalEventName | 'error'
+type StandardEventName = "@:tx-start" | "@:tx-hash" | "@:tx-mined";
+type ApprovalEventName =
+  | "approval:tx-start"
+  | "approval:tx-hash"
+  | "approval:tx-mined";
+export type EventNames = StandardEventName | ApprovalEventName | "error";
