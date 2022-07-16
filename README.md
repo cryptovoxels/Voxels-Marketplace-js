@@ -47,12 +47,29 @@ It's not a great behavior especially if we need a sticky `env` file in the futur
 
 1. install with `npm i @cryptovoxels/marketplace-js`
 
-2. Use
+2. Import and use
+
+### Using the Marketplace class
 
 ```js
-const provider = window.ethereum;
+import { Marketplace } from '@cryptovoxels/marketplace-js'
 
-const marketplaceSDK = new VoxelsMarketplace(window.ethereum);
+const provider = ethers.providers.Web3Provider(window.ethereum);
+
+// All of these are optional; the default is console.log
+const myHandlers={
+    onTxStart: () => ...,
+    onApprovalTxStart: () => ...,
+    onTxHash: (hash: string) => console.log(hash),
+    onApprovalTxHash: (hash: string) => ...,
+    onTxMined: (hash: string) => ...,
+    onApprovalTxMined: (hash: string) => ...,
+    onError: (err: any) => ....
+}
+const network = 'mainnet' // See types for the networks: mainnet,mumbai,polygon,rinkeby
+
+// Given we're calling `createListing` in this example, we use a Signer. Functions that reads (not write) from the blochain can run on a provider. 
+const marketplace = new Marketplace(provider.getSigner(),myHandlers,network);
 
 const myItemToList = {
   token_id: 1;
@@ -61,8 +78,61 @@ const myItemToList = {
   quantity: 1;
 }
 
-await marketplace.list(myItemToList)
+await marketplace.createListing(myItemToList)
 // emits events
+// Will log "{hash:0x...}" given our onTxHash
+
+```
+
+**Purchasing an NFT**
+```js
+
+import {generateListingId} from '@cryptovoxels/marketplace-js'
+
+const idOfListings= generateListingId(walletOfSeller,ContractAddress,TokenId)
+
+// purchase takes 3 arguments: 2 optional and one required;
+// idOfListings is a unique hash by seller+ContractAddress+tokenId;
+// The second argument is the index within the list of listings  (by default 0)
+// The third argument is the quantity to purchase
+await marketplace.purchase(idOfListings,0,1)
+```
+
+### Using the SDK:
+
+
+```js
+import { VoxelsMarketplaceSDK,generateListingId } from '@cryptovoxels/marketplace-js'
+
+const provider = ethers.providers.Web3Provider(window.ethereum);
+
+const network = 'mainnet' // See types for the networks: mainnet,mumbai,polygon,rinkeby
+
+// Given we're calling `createListing` in this example, we use a Signer. Functions that reads (not write) from the blochain can run on a provider. 
+const marketplaceSDK = new VoxelsMarketplaceSDK(provider.getSigner(),network);
+
+const myItemToList = {
+  token_id: 1;
+  address: '0x...';
+  price: 0.5;
+  quantity: 1;
+}
+
+await marketplaceSDK.createListing(myItemToList)
+// emits events approval:tx-start -> approval:tx-hash -> approval:tx-mined
+// emits events @:tx-start -> @:tx-hash -> @:tx-mined
+
+
+// Purchasing:
+
+
+const idOfListings= generateListingId(walletOfSeller,ContractAddress,TokenId)
+
+// purchase takes 3 arguments: 2 optional and one required;
+// idOfListings is a unique hash by seller+ContractAddress+tokenId;
+// The second argument is the index within the list of listings  (by default 0)
+// The third argument is the quantity to purchase
+await marketplace.purchase(idOfListings,0,1)
 ```
 
 ## Todo:
