@@ -6,5 +6,5 @@ export {
   // Main SDK export:
   VoxelsMarketplaceSDK,
   Marketplace,
-  types
+  types,
 };
