@@ -37,12 +37,16 @@
   },
   "repository": {
     "type": "git",
-    "directory": "https://github.com/cryptovoxels/Voxels-Marketplace-js"
+    "directory": "git+https://github.com/cryptovoxels/marketplace-js.git"
+  },
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com/cryptovoxels"
   },
   "bugs": {
-    "url": "https://github.com/cryptovoxels/Voxels-Marketplace-js/issues"
+    "url": "https://github.com/cryptovoxels/marketplace-js/issues"
   },
-  "homepage": "https://github.com/cryptovoxels/Voxels-Marketplace-js",
+  "homepage": "https://github.com/cryptovoxels/marketplace-js",
   "devDependencies": {
     "@typechain/ethers-v5": "^10.1.0",
     "@types/node": "^17.0.33",
