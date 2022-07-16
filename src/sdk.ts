@@ -22,11 +22,16 @@ import {
 } from "./lib/types";
 const marketplaceAbi = require("./abis/marketplacev1.json");
 
-export class VoxelsMarketplace extends EventEmitter {
+/**
+ * General class that interacts with the Voxels marketplace contract.
+ * It emits events on tx-start, tx-hash, tx-emit and error;
+ */
+export class VoxelsMarketplaceSDK extends EventEmitter {
   private providerOrSigner: ProviderOrSigner;
   private contractInstance: Marketplacev1;
   private network: Network;
   private logger: (args: string) => void = console.log;
+  // wrap this.emit for Typing
   private emitEvent = (eventName: EventNames, ...args: any[]) =>
     this.emit(eventName, args);
   constructor(

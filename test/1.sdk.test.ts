@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import test from 'tape'
-import {generateListingId, VoxelsMarketplace} from '../src/index'
+import {generateListingId, VoxelsMarketplaceSDK} from '../src/index'
 import { askApproval, getIsApproved } from '../src/lib/helpers';
 import { ListingInfo, ListingParams } from '../src/lib/types';
 const MockERC721JSON = require('./abis/MockERC721.json')
@@ -17,7 +17,7 @@ const signer2 = provider.getSigner(1)
 
 let mockERC721:ethers.Contract;
 
-const sdk:VoxelsMarketplace = new VoxelsMarketplace(signer,'local')
+const sdk:VoxelsMarketplaceSDK = new VoxelsMarketplaceSDK(signer,'local')
 //Custom function to create heeaps of orders
 test('Setup()', async (t) => {
     const mockErc721Factory = new ethers.ContractFactory(MockERC721JSON.abi,MockERC721JSON.bytecode,signer)

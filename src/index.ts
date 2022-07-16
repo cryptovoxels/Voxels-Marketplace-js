@@ -1,6 +1,10 @@
-import { VoxelsMarketplace } from "./sdk";
+import * as types from "./lib/types";
+import { Marketplace } from "./marketplace";
+import { VoxelsMarketplaceSDK } from "./sdk";
 export { generateListingId } from "./lib/helpers";
 export {
   // Main SDK export:
-  VoxelsMarketplace,
+  VoxelsMarketplaceSDK,
+  Marketplace,
+  types
 };
