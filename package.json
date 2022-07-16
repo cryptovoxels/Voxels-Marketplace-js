@@ -37,7 +37,7 @@
   },
   "repository": {
     "type": "git",
-    "directory": "git+https://github.com/cryptovoxels/marketplace-js.git"
+    "url": "git+https://github.com/cryptovoxels/marketplace-js.git"
   },
   "publishConfig": {
     "access": "restricted",
