@@ -11,9 +11,9 @@ export const CONTRACTS: Record<Network, ContractsByNetwork> = {
     tokenRegistry: `0xBE06783f7a02cFF726c0d4A6F11e8B3c237030a3`,
   },
   polygon: {
-    tokenRegistry: ``,
-    marketplace: ``,
-    wrapperRegistry: ``,
+    tokenRegistry: `0x3579F235D13419ABD8B4784aB24282283f3AcBB0`,
+    marketplace: `0xbEf14b76778850d0376b5dE849800fdf92Ab49F6`,
+    wrapperRegistry: `0xf3644a8896A51b947Dd29CD3e91aE0cbF4dC785A`,
   },
   rinkeby: {
     tokenRegistry: `0x35bCe40f61004a30527BbABF4b3240042B800A63`,
